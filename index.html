@@ -1,483 +1,933 @@
 <!DOCTYPE html>
-<html lang="id">
-
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGAP - Sistem Informasi Gerbang Pesantren</title>
     
-    <title>SIGAP - Sistem Informasi Gerbang Pendaftaran Santri Digital</title>
-    <meta name="description" content="SIGAP adalah Sistem Informasi Gerbang Pendaftaran Santri Digital berbasis Laravel 12. Solusi modern untuk manajemen pendaftaran pesantren yang efisien dan transparan.">
-    <meta name="keywords" content="SIGAP, Pendaftaran Santri Online, Sistem Informasi Pesantren, Laravel 12, Aplikasi Pendaftaran Digital">
-    <meta name="author" content="SIGAP Project">
-    <meta name="robots" content="index, follow">
-
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="SIGAP - Pendaftaran Santri Digital">
-    <meta property="og:description" content="Modernisasi administrasi pesantren dengan sistem pendaftaran terintegrasi.">
-    <meta property="og:image" content="assets/degisn/Group 1.png">
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css">
-    <link rel="stylesheet" href="css/style.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sigap: '#198754',
+                        dark: '#1f2937',
+                        secondary: '#0d9488',
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+    <style>
+        body { overflow-x: hidden; }
+        .bg-dots {
+            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+            background-size: 25px 25px;
+        }
+        html {
+            overflow-x: hidden;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+        }
+        .img-float { animation: floating 3s ease-in-out infinite; }
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        /* Mobile-first responsive adjustments */
+        @media (max-width: 768px) {
+            .container { padding-left: 1rem; padding-right: 1rem; }
+            section { padding: 3rem 0; }
+            h1 { font-size: 2.5rem; line-height: 1.2; }
+            h2 { font-size: 2rem; }
+            .grid-cols-1 { grid-template-columns: 1fr; }
+            .text-sm-mobile { font-size: 14px; }
+            .p-8 { padding: 1.5rem; }
+        }
+        
+        /* Parallax Effect */
+        .parallax-section {
+            position: relative;
+            overflow: hidden;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        
+        .parallax-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120%;
+            background: linear-gradient(135deg, rgba(25, 135, 84, 0.1) 0%, rgba(15, 23, 42, 0.9) 100%);
+            z-index: 1;
+        }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 90%;
+            width: 400px;
+            text-align: center;
+            position: relative;
+            animation: modalAppear 0.3s ease-out;
+        }
+        
+        @keyframes modalAppear {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        /* Mobile UI/UX Improvements */
+        .mobile-optimized {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .mobile-card {
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 0 auto;
+            max-width: 100%;
+        }
+        
+        .touch-friendly {
+            min-height: 44px;
+            min-width: 44px;
+        }
+        
+        /* New Styles */
+        .gradient-text {
+            background: linear-gradient(135deg, #198754 0%, #0d9488 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .stat-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid #198754;
+        }
+        
+        .hover-scale:hover {
+            transform: scale(1.05);
+        }
+        
+        .testimonial-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #198754;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px #19875433;
+        }
+        
+        .opensource-badge {
+            background: linear-gradient(135deg, #198754 0%, #0d9488 100%);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(25, 135, 84, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(25, 135, 84, 0); }
+        }
+        
+        .github-card {
+            background: linear-gradient(135deg, #24292e 0%, #1a1e22 100%);
+            color: white;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .github-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+    </style>
 </head>
+<body class="bg-white text-dark">
 
-<body>
-
-    <section id="hero" class="hero-section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6" data-aos="fade-right">
-                    <span
-                        class="badge bg-success-subtle text-success border border-success mb-3 px-3 py-2 rounded-pill fw-bold">PROYEK
-                        TUGAS AKHIR & PKL 2025</span>
-                    <h1 class="display-4 fw-bold mb-4">Modernisasi Administrasi Pesantren dengan <span
-                            class="text-success">SIGAP</span></h1>
-                    <p class="lead mb-5 text-muted">Sistem Informasi Gerbang Pendaftaran terintegrasi berbasis Laravel
-                        12. Solusi digital untuk manajemen pendaftaran santri yang efisien, transparan, dan profesional.
+    <header class="relative hero-gradient pt-20 lg:pt-32 overflow-hidden">
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center gap-12">
+                <div class="lg:w-1/2 text-center lg:text-left" data-aos="fade-right">
+                    <div class="flex flex-wrap gap-3 mb-6">
+                        <span class="opensource-badge">
+                            <i class="fab fa-github mr-2"></i>OPEN SOURCE
+                        </span>
+                        <span class="inline-block px-4 py-2 rounded-full bg-sigap/20 text-sigap text-xs font-bold border border-sigap/30">
+                            TEKNOLOGI MODERN LARAVEL 12
+                        </span>
+                    </div>
+                    <h1 class="text-3xl md:text-4xl lg:text-6xl font-extrabold text-white mb-6 leading-tight">
+                        SIGAP: Gerbang <span class="text-sigap">Digital</span> Pesantren
+                    </h1>
+                    <p class="text-sm md:text-lg text-slate-400 mb-10 max-w-xl mx-auto lg:mx-0">
+                        Sistem pendaftaran santri <strong>open source</strong> dengan fitur pembayaran otomatis, laporan instan, dan keamanan berlapis.
                     </p>
-                    <div class="d-flex gap-3">
-                        <a href="#documentation" class="btn btn-success btn-lg rounded-pill px-4">Dokumentasi</a>
-                        <a href="#gallery" class="btn btn-outline-dark btn-lg rounded-pill px-4">Eksplorasi</a>
+                    <div class="flex flex-wrap justify-center lg:justify-start gap-4">
+                        <a href="#github" class="px-6 md:px-8 py-3 md:py-4 bg-sigap hover:bg-green-700 text-white rounded-2xl font-bold transition-all shadow-lg shadow-green-900/20 touch-friendly">
+                            <i class="fab fa-github mr-2"></i>Lihat di GitHub
+                        </a>
+                        <a href="#kontak" class="px-6 md:px-8 py-3 md:py-4 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-2xl font-bold transition-all backdrop-blur-md touch-friendly">
+                            <i class="fas fa-comment mr-2"></i>Hubungi Pengembang
+                        </a>
                     </div>
                 </div>
-                <div class="col-lg-6 mt-5 mt-lg-0 text-center" data-aos="zoom-in">
-                    <img src="assets/degisn/Group 1.png"
-                        class="img-fluid img-floating" alt="Dashboard SIGAP">
+                <div class="lg:w-1/2 mt-8 lg:mt-0" data-aos="zoom-in">
+                    <img src="assets/degisn/Group 1.png" class="w-full h-auto img-float drop-shadow-[0_35px_35px_rgba(0,0,0,0.5)]" alt="Dashboard Preview">
+                </div>
+            </div>
+        </div>
+
+        <div class="absolute bottom-0 w-full leading-[0]">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block w-full h-[60px] lg:h-[120px]">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V0C41.39,52.12,142.56,76.54,244.21,75.31A857.5,857.5,0,0,0,321.39,56.44Z" fill="#ffffff"></path>
+            </svg>
+        </div>
+    </header>
+
+    <!-- Stats Section -->
+    <section class="py-12 md:py-20 bg-slate-50">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+                <div class="text-center p-6 bg-white rounded-2xl shadow-sm stat-card" data-aos="fade-up">
+                    <div class="text-3xl md:text-4xl font-bold text-sigap mb-2"><i class="fab fa-github"></i></div>
+                    <p class="text-sm md:text-base text-slate-600">Open Source</p>
+                </div>
+                <div class="text-center p-6 bg-white rounded-2xl shadow-sm stat-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-3xl md:text-4xl font-bold text-sigap mb-2">100%</div>
+                    <p class="text-sm md:text-base text-slate-600">Gratis & Free</p>
+                </div>
+                <div class="text-center p-6 bg-white rounded-2xl shadow-sm stat-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-3xl md:text-4xl font-bold text-sigap mb-2">MIT</div>
+                    <p class="text-sm md:text-base text-slate-600">License</p>
+                </div>
+                <div class="text-center p-6 bg-white rounded-2xl shadow-sm stat-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-3xl md:text-4xl font-bold text-sigap mb-2">80%</div>
+                    <p class="text-sm md:text-base text-slate-600">Optimasi Mobile</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="features" class="section-padding bg-white">
-    <div class="container text-center">
-        <h2 class="section-title fw-bold">Fitur Unggulan</h2>
-        <p class="section-subtitle mb-5 text-muted">Dikembangkan dengan arsitektur modern untuk kemudahan operasional panitia dan wali santri.</p>
-        
-        <div class="row g-4">
-            <div class="col-md-4" data-aos="fade-up">
-                <div class="feature-card p-4 h-100 shadow-sm border rounded-4 bg-white">
-                    <div class="tech-icon mb-4 fs-1" >
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <h5 class="fw-bold">Input Cepat & Responsif</h5>
-                    <p class="small text-muted">Antarmuka yang dioptimalkan untuk pengisian data santri tanpa hambatan di berbagai perangkat.</p>
+    <section id="kelebihan" class="py-16 md:py-24 bg-white bg-dots">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="text-center mb-12 md:mb-20" data-aos="fade-up">
+                <h2 class="text-2xl md:text-3xl lg:text-4xl font-extrabold mb-4">Kenapa Pesantren Harus <span class="text-sigap">SIGAP?</span></h2>
+                <p class="text-slate-500 max-w-2xl mx-auto italic text-sm md:text-base">Membangun ekosistem pendaftaran yang transparan, modern, dan sangat efisien.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mobile-optimized">
+                <!-- Feature Cards -->
+                <div class="mobile-card bg-white border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300" data-aos="fade-up">
+                    <div class="w-12 h-12 md:w-14 md:h-14 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-inner"><i class="fas fa-user-shield"></i></div>
+                    <h3 class="text-lg md:text-xl font-bold mb-2 md:mb-3">Keamanan Berlapis</h3>
+                    <p class="text-slate-500 text-xs md:text-sm leading-relaxed">Proteksi data sensitif dengan enkripsi terbaru dan keamanan dari serangan injeksi SQL.</p>
+                </div>
+
+                <div class="mobile-card bg-white border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-12 h-12 md:w-14 md:h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-inner"><i class="fas fa-credit-card"></i></div>
+                    <h3 class="text-lg md:text-xl font-bold mb-2 md:mb-3">All Payment Online</h3>
+                    <p class="text-slate-500 text-xs md:text-sm leading-relaxed">Mendukung semua bank, e-wallet (QRIS, Dana, OVO), dan minimarket melalui payment gateway.</p>
+                </div>
+
+                <div class="mobile-card bg-white border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-12 h-12 md:w-14 md:h-14 bg-green-50 text-sigap rounded-2xl flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-inner"><i class="fas fa-th-large"></i></div>
+                    <h3 class="text-lg md:text-xl font-bold mb-2 md:mb-3">Double Dashboard</h3>
+                    <p class="text-slate-500 text-xs md:text-sm leading-relaxed">Panel khusus untuk Admin (Manajemen) dan Pendaftar (Wali Santri) yang informatif.</p>
+                </div>
+
+                <div class="mobile-card bg-white border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-12 h-12 md:w-14 md:h-14 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center text-xl md:text-2xl mb-4 md:text-2xl mb-6 shadow-inner"><i class="fas fa-chart-pie"></i></div>
+                    <h3 class="text-lg md:text-xl font-bold mb-2 md:mb-3">Statistik Real-time</h3>
+                    <p class="text-slate-500 text-xs md:text-sm leading-relaxed">Grafik tren pendaftaran harian dan status kuota santri yang diperbarui secara otomatis.</p>
+                </div>
+
+                <div class="mobile-card bg-white border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300" data-aos="fade-up" data-aos-delay="400">
+                    <div class="w-12 h-12 md:w-14 md:h-14 bg-slate-100 text-slate-700 rounded-2xl flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-inner"><i class="fas fa-file-export"></i></div>
+                    <h3 class="text-lg md:text-xl font-bold mb-2 md:mb-3">Export PDF & Excel</h3>
+                    <p class="text-slate-500 text-xs md:text-sm leading-relaxed">Cetak laporan data santri atau ekspor ke format Excel hanya dengan satu klik saja.</p>
+                </div>
+
+                <div class="mobile-card bg-white border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300" data-aos="fade-up" data-aos-delay="500">
+                    <div class="w-12 h-12 md:w-14 md:h-14 bg-teal-50 text-teal-600 rounded-2xl flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-inner"><i class="fas fa-search-dollar"></i></div>
+                    <h3 class="text-lg md:text-xl font-bold mb-2 md:mb-3">Transparansi Dana</h3>
+                    <p class="text-slate-500 text-xs md:text-sm leading-relaxed">Setiap rupiah yang masuk tercatat otomatis, memudahkan audit keuangan pendaftaran.</p>
+                </div>
+
+                <div class="mobile-card bg-white border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300" data-aos="fade-up" data-aos-delay="600">
+                    <div class="w-12 h-12 md:w-14 md:h-14 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-inner"><i class="fas fa-mobile-alt"></i></div>
+                    <h3 class="text-lg md:text-xl font-bold mb-2 md:mb-3">Full Responsive</h3>
+                    <p class="text-slate-500 text-xs md:text-sm leading-relaxed">Tampilan sempurna di semua perangkat: HP, Tablet, Laptop, hingga Monitor 4K.</p>
+                </div>
+
+                <div class="mobile-card bg-white border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300" data-aos="fade-up" data-aos-delay="700">
+                    <div class="w-12 h-12 md:w-14 md:h-14 bg-yellow-50 text-yellow-600 rounded-2xl flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-inner"><i class="fas fa-sync-alt"></i></div>
+                    <h3 class="text-lg md:text-xl font-bold mb-2 md:mb-3">AJAX (No Reload)</h3>
+                    <p class="text-slate-500 text-xs md:text-sm leading-relaxed">Interaksi antar halaman dan form tanpa loading layar penuh, memberikan UX yang mulus.</p>
+                </div>
+
+                <div class="mobile-card bg-white border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300" data-aos="fade-up" data-aos-delay="800">
+                    <div class="w-12 h-12 md:w-14 md:h-14 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-inner"><i class="fab fa-laravel"></i></div>
+                    <h3 class="text-lg md:text-xl font-bold mb-2 md:mb-3">Open Source</h3>
+                    <p class="text-slate-500 text-xs md:text-sm leading-relaxed">Kode sumber terbuka sepenuhnya, bisa dikustomisasi sesuai kebutuhan pesantren.</p>
                 </div>
             </div>
 
-            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-                <div class="feature-card p-4 h-100 shadow-sm border rounded-4 bg-white">
-                    <div class="tech-icon mb-4 fs-1" >
-                        <i class="fas fa-user-shield"></i>
-                    </div>
-                    <h5 class="fw-bold">Keamanan Data Berlapis</h5>
-                    <p class="small text-muted">Enkripsi data sensitif santri dan proteksi CSRF/XSS bawaan Laravel 12 yang sangat aman.</p>
-                </div>
-            </div>
-
-            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-                <div class="feature-card p-4 h-100 shadow-sm border rounded-4 bg-white">
-                    <div class="tech-icon mb-4 fs-1" >
-                        <i class="fas fa-wallet"></i>
-                    </div>
-                    <h5 class="fw-bold">Pembayaran Otomatis</h5>
-                    <p class="small text-muted">Integrasi Payment Gateway untuk verifikasi pembayaran pendaftaran secara real-time tanpa cek manual.</p>
-                </div>
-            </div>
-
-            <div class="col-md-4" data-aos="fade-up">
-                <div class="feature-card p-4 h-100 shadow-sm border rounded-4 bg-white">
-                    <div class="tech-icon mb-4 fs-1" >
-                        <i class="fab fa-whatsapp"></i>
-                    </div>
-                    <h5 class="fw-bold">WhatsApp Gateway</h5>
-                    <p class="small text-muted">Notifikasi otomatis ke nomor wali santri saat pendaftaran berhasil atau pembayaran terverifikasi.</p>
-                </div>
-            </div>
-
-            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-                <div class="feature-card p-4 h-100 shadow-sm border rounded-4 bg-white">
-                    <div class="tech-icon mb-4 fs-1" >
-                        <i class="fas fa-file-pdf"></i>
-                    </div>
-                    <h5 class="fw-bold">Laporan Instan</h5>
-                    <p class="small text-muted">Ekspor data pendaftar ke format Excel atau PDF hanya dengan satu klik untuk keperluan arsip fisik.</p>
-                </div>
-            </div>
-
-            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-                <div class="feature-card p-4 h-100 shadow-sm border rounded-4 bg-white">
-                    <div class="tech-icon mb-4 fs-1" >
-                        <i class="fas fa-chart-bar"></i>
-                    </div>
-                    <h5 class="fw-bold">Analitik Statistik</h5>
-                    <p class="small text-muted">Pantau grafik tren pendaftaran santri harian melalui dashboard admin yang informatif.</p>
-                </div>
-            </div>
+            <div class="h-16 md:h-24 lg:hidden"></div>
         </div>
-    </div>
-</section>
+    </section>
 
-    <!-- Gallery Fitur -->
-    <section id="gallery" class="section-padding">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="section-title">Antarmuka Sistem</h2>
-            <div class="d-flex justify-content-center flex-wrap mt-4">
-                <button class="filter-btn active" data-filter="all">Semua Tampilan</button>
-                <button class="filter-btn" data-filter="dashboard">Admin Panel</button>
-                <button class="filter-btn" data-filter="frontend">User Interface</button>
+    <!-- GitHub Section -->
+    <section id="github" class="py-16 md:py-24 bg-slate-50">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="text-center mb-12 md:mb-20" data-aos="fade-up">
+                <h2 class="text-2xl md:text-3xl lg:text-4xl font-extrabold mb-4">Proyek <span class="gradient-text">Open Source</span></h2>
+                <p class="text-slate-500 max-w-2xl mx-auto text-sm md:text-base">
+                    SIGAP adalah proyek open source yang bisa digunakan secara gratis oleh semua pesantren
+                </p>
             </div>
-        </div>
-
-        <div class="row g-4" id="gallery-wrapper">
-            <div class="col-md-4 gallery-item" data-category="dashboard">
-                <a href="assets/ui/admin/admin-dashboard.png" data-lightbox="sigap">
-                    <img src="assets/ui/admin/admin-dashboard.png" alt="Dashboard">
-                    <div class="gallery-overlay"><h5>Dashboard Utama</h5><p>Admin Panel</p></div>
-                </a>
-            </div>
-            <div class="col-md-4 gallery-item" data-category="dashboard">
-                <a href="assets/ui/admin/data-akun.png" data-lightbox="sigap">
-                    <img src="assets/ui/admin/data-akun.png" alt="Data Akun">
-                    <div class="gallery-overlay"><h5>Data Akun</h5><p>Manajemen Pengguna</p></div>
-                </a>
-            </div>
-            <div class="col-md-4 gallery-item" data-category="dashboard">
-                <a href="assets/ui/admin/data-pendaftar.png" data-lightbox="sigap">
-                    <img src="assets/ui/admin/data-pendaftar.png" alt="Data Pendaftar">
-                    <div class="gallery-overlay"><h5>Data Pendaftar</h5><p>Manajemen Santri</p></div>
-                </a>
-            </div>
-            <div class="col-md-4 gallery-item" data-category="dashboard">
-                <a href="assets/ui/admin/gelombang.png" data-lightbox="sigap">
-                    <img src="assets/ui/admin/gelombang.png" alt="Gelombang">
-                    <div class="gallery-overlay"><h5>Gelombang</h5><p>Pengaturan Periode</p></div>
-                </a>
-            </div>
-            <div class="col-md-4 gallery-item" data-category="dashboard">
-                <a href="assets/ui/admin/laporan.png" data-lightbox="sigap">
-                    <img src="assets/ui/admin/laporan.png" alt="Laporan">
-                    <div class="gallery-overlay"><h5>Laporan</h5><p>Rekapitulasi Data</p></div>
-                </a>
-            </div>
-            <div class="col-md-4 gallery-item" data-category="dashboard">
-                <a href="assets/ui/admin/sekolah-pilihan.png" data-lightbox="sigap">
-                    <img src="assets/ui/admin/sekolah-pilihan.png" alt="Sekolah">
-                    <div class="gallery-overlay"><h5>Sekolah Pilihan</h5><p>Master Data</p></div>
-                </a>
-            </div>
-            <div class="col-md-4 gallery-item" data-category="dashboard">
-                <a href="assets/ui/admin/setting-web.png" data-lightbox="sigap">
-                    <img src="assets/ui/admin/setting-web.png" alt="Setting">
-                    <div class="gallery-overlay"><h5>Setting Web</h5><p>Konfigurasi Sistem</p></div>
-                </a>
-            </div>
-            <div class="col-md-4 gallery-item" data-category="dashboard">
-                <a href="assets/ui/admin/verifikasi-modal.png" data-lightbox="sigap">
-                    <img src="assets/ui/admin/verifikasi-modal.png" alt="Verifikasi">
-                    <div class="gallery-overlay"><h5>Verifikasi</h5><p>Persetujuan Berkas</p></div>
-                </a>
-            </div>
-
-            <div class="col-md-4 gallery-item" data-category="frontend">
-                <a href="assets/ui/pendaftar/home.png" data-lightbox="sigap">
-                    <img src="assets/ui/pendaftar/home.png" alt="Home">
-                    <div class="gallery-overlay"><h5>Landing Page</h5><p>Interface Pendaftar</p></div>
-                </a>
-            </div>
-            <div class="col-md-4 gallery-item" data-category="frontend">
-                <a href="assets/ui/pendaftar/pendaftaran-form.png" data-lightbox="sigap">
-                    <img src="assets/ui/pendaftar/pendaftaran-form.png" alt="Home">
-                    <div class="gallery-overlay"><h5>Form Pendaftaran</h5><p>Interface Pendaftar</p></div>
-                </a>
-            </div>
-            <div class="col-md-4 gallery-item" data-category="frontend">
-                <a href="assets/ui/pendaftar/login-pendaftar.png" data-lightbox="sigap">
-                    <img src="assets/ui/pendaftar/login-pendaftar.png" alt="Login">
-                    <div class="gallery-overlay"><h5>Login</h5><p>Akses Masuk</p></div>
-                </a>
-            </div>
-            <div class="col-md-4 gallery-item" data-category="frontend">
-                <a href="assets/ui/pendaftar/dashboard-laptop.png" data-lightbox="sigap">
-                    <img src="assets/ui/pendaftar/dashboard-laptop.png" alt="Dashboard">
-                    <div class="gallery-overlay"><h5>Dashboard</h5><p>Tampilan Desktop</p></div>
-                </a>
-            </div>
-            <div class="col-md-4 gallery-item" data-category="frontend">
-                <a href="assets/ui/pendaftar/dashbaord-mobile.png" data-lightbox="sigap">
-                    <img src="assets/ui/pendaftar/dashbaord-mobile.png" alt="Mobile">
-                    <div class="gallery-overlay"><h5>Dashboard Mobile</h5><p>Responsif View</p></div>
-                </a>
-            </div>
-            <div class="col-md-4 gallery-item" data-category="frontend">
-                <a href="assets/ui/pendaftar/pay-laptop.png" data-lightbox="sigap">
-                    <img src="assets/ui/pendaftar/pay-laptop.png" alt="Payment">
-                    <div class="gallery-overlay"><h5>Pembayaran</h5><p>Status Transaksi</p></div>
-                </a>
-            </div>
-            <div class="col-md-4 gallery-item" data-category="frontend">
-                <a href="assets/ui/pendaftar/upload-berkas-laptop.png" data-lightbox="sigap">
-                    <img src="assets/ui/pendaftar/upload-berkas-laptop.png" alt="Upload">
-                    <div class="gallery-overlay"><h5>Upload Berkas</h5><p>Kelengkapan Data</p></div>
-                </a>
-            </div>
-            <div class="col-md-4 gallery-item" data-category="frontend">
-                <a href="assets/ui/pendaftar/dashboard-success-pay.png" data-lightbox="sigap">
-                    <img src="assets/ui/pendaftar/dashboard-success-pay.png" alt="Success">
-                    <div class="gallery-overlay"><h5>Konfirmasi Bayar</h5><p>Interface Berhasil</p></div>
-                </a>
-            </div>
-            <div class="col-md-4 gallery-item" data-category="frontend">
-                <a href="assets/ui/pendaftar/sidebar-mobile.png" data-lightbox="sigap">
-                    <img src="assets/ui/pendaftar/sidebar-mobile.png" alt="Menu">
-                    <div class="gallery-overlay"><h5>Menu Navigasi</h5><p>Tampilan Sidebar</p></div>
-                </a>
-            </div>
-        </div>
-
-        <nav class="mt-5">
-            <ul class="pagination justify-content-center" id="gallery-pagination">
-                </ul>
-        </nav>
-    </div>
-</section>
-
-<!-- eksosistem section  -->
-   <section id="documentation" class="section-padding bg-white">
-    <div class="container">
-        <div class="row g-5 align-items-center">
-            <div class="col-lg-7">
-                <h2 class="section-title">Eksosistem Teknologi</h2>
-                <p class="mb-4">Sistem SIGAP dikembangkan dengan integrasi teknologi mutakhir dan layanan pihak ketiga terbaik untuk menjamin keandalan sistem.</p>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="github-card p-8 md:p-12 mb-8" data-aos="fade-up">
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="text-center md:text-left">
+                            <h3 class="text-2xl md:text-3xl font-bold mb-4 flex items-center">
+                                <i class="fab fa-github mr-3 text-3xl"></i>
+                                Repository SIGAP
+                            </h3>
+                            <p class="text-slate-300 mb-6 text-sm md:text-base">
+                                Kode sumber SIGAP tersedia di GitHub. Silakan clone, fork, atau kontribusi untuk pengembangan sistem ini.
+                            </p>
+                            <div class="flex flex-wrap gap-4">
+                                <a href="https://github.com/username/sigap" 
+                                   target="_blank"
+                                   class="px-6 py-3 bg-white text-dark hover:bg-slate-100 rounded-xl font-bold transition-all touch-friendly">
+                                    <i class="fab fa-github mr-2"></i> GitHub Repository
+                                </a>
+                                <a href="#kontak" 
+                                   class="px-6 py-3 bg-sigap hover:bg-green-700 text-white rounded-xl font-bold transition-all touch-friendly">
+                                    <i class="fas fa-comment mr-2"></i> Konsultasi Dulu
+                                </a>
+                            </div>
+                        </div>
+                        <div class="bg-slate-800/50 rounded-xl p-6">
+                            <h4 class="font-bold mb-4 text-white">📋 Syarat Penggunaan</h4>
+                            <ul class="space-y-3 text-sm text-slate-300">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-sigap mr-2 mt-1"></i>
+                                    <span>Harus konsultasi dengan pengembang terlebih dahulu</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-sigap mr-2 mt-1"></i>
+                                    <span>Gratis untuk semua pesantren</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-sigap mr-2 mt-1"></i>
+                                    <span>MIT License - bebas dimodifikasi</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-sigap mr-2 mt-1"></i>
+                                    <span>Dokumentasi lengkap tersedia</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
                 
-                <div class="row g-3">
-                    <div class="col-6 col-md-4">
-                        <a href="https://laravel.com" target="_blank" class="text-decoration-none">
-                            <div class="tech-card text-center p-3 border rounded-3 hover-shadow">
-                                <i class="fab fa-laravel fa-2x text-danger mb-2"></i>
-                                <h6 class="text-dark">Laravel 12</h6>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-6 col-md-4">
-                        <a href="https://getbootstrap.com" target="_blank" class="text-decoration-none">
-                            <div class="tech-card text-center p-3 border rounded-3 hover-shadow">
-                                <i class="fab fa-bootstrap fa-2x text-primary mb-2"></i>
-                                <h6 class="text-dark">Bootstrap 5</h6>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-6 col-md-4">
-                        <a href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank" class="text-decoration-none">
-                            <div class="tech-card text-center p-3 border rounded-3 hover-shadow">
-                                <i class="fab fa-css3-alt fa-2x text-info mb-2"></i>
-                                <h6 class="text-dark">CSS3 Modern</h6>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-6 col-md-4">
-                        <a href="https://api.jquery.com/jquery.ajax/" target="_blank" class="text-decoration-none">
-                            <div class="tech-card text-center p-3 border rounded-3 hover-shadow">
-                                <i class="fab fa-js fa-2x text-warning mb-2"></i>
-                                <h6 class="text-dark">JS & AJAX</h6>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-6 col-md-4">
-                        <a href="https://www.whatsapp.com/business/api" target="_blank" class="text-decoration-none">
-                            <div class="tech-card text-center p-3 border rounded-3 hover-shadow">
-                                <i class="fab fa-whatsapp fa-2x text-success mb-2"></i>
-                                <h6 class="text-dark">WA Gateway</h6>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-6 col-md-4">
-                        <a href="https://midtrans.com" target="_blank" class="text-decoration-none">
-                            <div class="tech-card text-center p-3 border rounded-3 hover-shadow">
-                                <i class="fas fa-credit-card fa-2x text-primary mb-2"></i>
-                                <h6 class="text-dark">Midtrans</h6>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-5">
-                <div class="card border-0 shadow-lg rounded-4 p-4 p-lg-5 bg-dark text-white">
-                    <div class="text-center mb-4">
-                        <div class="icon-box bg-primary d-inline-block p-3 rounded-circle mb-3">
-                            <i class="fas fa-rocket fa-2x text-white"></i>
-                        </div>
-                        <h3 class="fw-bold">Coba Demo Sistem</h3>
-                        <p class="text-light opacity-75">Tertarik untuk mengeksplorasi fitur SIGAP secara langsung? Silakan hubungi kami untuk mendapatkan akun demo.</p>
-                    </div>
-
-                    <div class="list-group list-group-flush mb-4">
-                        <div class="list-group-item bg-transparent text-white border-secondary px-0">
-                            <i class="fas fa-check-circle text-success me-2"></i> Akses Full Dashboard Admin
-                        </div>
-                        <div class="list-group-item bg-transparent text-white border-secondary px-0">
-                            <i class="fas fa-check-circle text-success me-2"></i> Simulasi Pembayaran Real-time
-                        </div>
-                        <div class="list-group-item bg-transparent text-white border-secondary px-0">
-                            <i class="fas fa-check-circle text-success me-2"></i> Panduan Penggunaan Langsung
-                        </div>
-                    </div>
-
-                    <a href="https://instagram.com/kmfffaa" target="_blank" class="btn btn-primary btn-lg w-100 rounded-pill fw-bold shadow">
-                        <i class="fab fa-instagram me-2"></i> Minta Akses Demo
-                    </a>
-                    <small class="text-center d-block mt-3 italic" style="color: rgb(181, 181, 181);">Hubungi kami melalui DM Instagram</small>
+                <div class="text-center" data-aos="fade-up" data-aos-delay="100">
+                    <p class="text-slate-600 text-sm md:text-base mb-8">
+                        <strong>Penting:</strong> Sebelum menggunakan sistem, Anda <strong>harus</strong> melakukan konsultasi terlebih dahulu dengan pengembang untuk memastikan sistem sesuai dengan kebutuhan pesantren Anda.
+                    </p>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-    <section id="developer" class="section-padding bg-light">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="section-title">Tim Pengembang</h2>
-            <p class="section-subtitle mx-auto" style="max-width: 600px;">Kombinasi keahlian teknis dan manajerial untuk menghadirkan solusi digital terbaik.</p>
-        </div>
-
-        <div class="row justify-content-center g-4">
-            <div class="col-lg-4 col-md-6">
-                <div class="developer-card text-center p-4 h-100 shadow-sm border-0 rounded-4 bg-white">
-                    <div class="position-relative d-inline-block mb-4">
-                        <img src="https://ui-avatars.com/api/?name=Fahri+Dwi&background=10b981&color=fff&size=128"
-                            class="rounded-circle border border-4 border-white shadow-sm" width="120" height="120">
-                        <span class="badge rounded-pill bg-success position-absolute bottom-0 end-0 px-2 py-1 shadow-sm">
-                            <i class="fas fa-check-circle me-1"></i> Active
-                        </span>
-                    </div>
-                    
-                    <h5 class="fw-bold mb-1">Fahri Dwi</h5>
-                    <p class="text-primary small fw-bold text-uppercase ls-1">Fullstack Developer & Tester</p>
-                    <hr class="mx-auto w-25">
-                    <p class="text-muted small mb-4">Bertanggung jawab penuh atas arsitektur backend, integrasi sistem, dan penjaminan kualitas aplikasi (QA).</p>
-                    
-                    <div class="d-flex justify-content-center gap-2 mb-4">
-                        <span class="skill-badge">Laravel</span>
-                        <span class="skill-badge">API</span>
-                        <span class="skill-badge">QA</span>
-                    </div>
-
-                    <div class="social-links">
-                        <a href="https://instagram.com/kmfffaa" target="_blank" class="social-btn"><i class="fab fa-instagram"></i></a>
-                        <a href="https://github.com/Fhridwi" class="social-btn"><i class="fab fa-github"></i></a>
-                        <a href="#" class="social-btn"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
+    <!-- Kontak Pengembang Section -->
+    <section id="kontak" class="py-16 md:py-24 bg-white">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="text-center mb-12 md:mb-20" data-aos="fade-up">
+                <h2 class="text-2xl md:text-3xl lg:text-4xl font-extrabold mb-4">Hubungi <span class="text-sigap">Pengembang</span></h2>
+                <p class="text-slate-500 max-w-2xl mx-auto text-sm md:text-base">
+                    Konsultasikan kebutuhan pesantren Anda sebelum menggunakan sistem SIGAP
+                </p>
             </div>
-
-            <div class="col-lg-4 col-md-6">
-                <div class="developer-card text-center p-4 h-100 shadow-sm border-0 rounded-4 bg-white">
-                    <div class="position-relative d-inline-block mb-4">
-                        <img src="https://ui-avatars.com/api/?name=Saprudi&background=334155&color=fff&size=128"
-                            class="rounded-circle border border-4 border-white shadow-sm" width="120" height="120">
-                        <span class="badge rounded-pill bg-secondary position-absolute bottom-0 end-0 px-2 py-1 shadow-sm">
-                            <i class="fas fa-edit me-1"></i> Active
-                        </span>
-                    </div>
-
-                    <h5 class="fw-bold mb-1">Saprudi</h5>
-                    <p class="text-primary small fw-bold text-uppercase ls-1">Technical Documentation</p>
-                    <hr class="mx-auto w-25">
-                    <p class="text-muted small mb-4">Menyusun laporan proyek, PPT presentasi, dan mengelola manajemen web dokumentasi secara komprehensif.</p>
-                    
-                    <div class="d-flex justify-content-center gap-2 mb-4">
-                        <span class="skill-badge">Docs</span>
-                        <span class="skill-badge">Analysis</span>
-                        <span class="skill-badge">Admin</span>
-                    </div>
-
-                    <div class="social-links">
-                        <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="social-btn"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" class="social-btn"><i class="fas fa-envelope"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-   <footer class="footer-section pt-5 pb-4 bg-dark text-white-50">
-    <div class="container">
-        <div class="row g-4 border-bottom border-secondary pb-5">
-            <div class="col-lg-5 col-md-12 text-center text-lg-start">
-                <h4 class="text-white fw-bold mb-3">SIGAP<span class="text-primary">.</span></h4>
-                <p class="small pe-lg-5">Sistem Informasi Gerbang Pendaftaran Santri Digital. Dibangun dengan dedikasi tinggi oleh tim pengembang untuk mendukung digitalisasi administrasi pendidikan Islam di Indonesia.</p>
-                <div class="d-flex justify-content-center justify-content-lg-start gap-3 mt-3">
-                    <a href="https://instagram.com/kmfffaa" target="_blank" class="footer-social-icon" title="Instagram Fahri Dwi">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="#" class="footer-social-icon" title="GitHub Project">
-                        <i class="fab fa-github"></i>
-                    </a>
-                    <a href="#" class="footer-social-icon" title="LinkedIn Professional">
-                        <i class="fab fa-linkedin-in"></i>
-                    </a>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-6 ms-auto">
-                <h6 class="text-white fw-bold text-uppercase mb-4 small ls-1">Navigasi</h6>
-                <ul class="list-unstyled d-grid gap-2">
-                    <li><a href="#hero" class="footer-link text-decoration-none">Beranda</a></li>
-                    <li><a href="#features" class="footer-link text-decoration-none">Fitur Utama</a></li>
-                    <li><a href="#gallery" class="footer-link text-decoration-none">Galeri Sistem</a></li>
-                    <li><a href="#documentation" class="footer-link text-decoration-none">Dokumentasi</a></li>
-                    <li><a href="#developer" class="footer-link text-decoration-none">Tim Pengembang</a></li>
-                </ul>
-            </div>
-
-            <div class="col-lg-3 col-6">
-                <h6 class="text-white fw-bold text-uppercase mb-4 small ls-1">Hubungi Kami</h6>
-                <div class="d-grid gap-3">
-                    <div class="d-flex align-items-start gap-2">
-                        <i class="fas fa-envelope text-primary mt-1"></i>
-                        <a href="mailto:mrfahridwihermawan@gmail.com" class="small text-white-50 text-decoration-none">mrfahridwihermawan@gmail.com</a>
-                    </div>
-                    <div class="d-flex align-items-start gap-2">
-                        <i class="fas fa-map-marker-alt text-primary mt-1"></i>
-                        <span class="small">Banjarsari, Madiun, Jawa Timur</span>
-                    </div>
-                    <div class="d-flex align-items-start gap-2">
-                        <i class="fab fa-whatsapp text-primary mt-1"></i>
-                        <a href="https://wa.me/6285792336956" target="_blank" class="small text-white-50 text-decoration-none">0857-9233-6956</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="pt-4">
-            <div class="row align-items-center">
-                <div class="col-md-7 text-center text-md-start">
-                    <p class="small mb-0">&copy; 2025 <span class="text-white fw-bold">SIGAP Project Team</span>. Dikembangkan oleh <a href="https://instagram.com/kmfffaa" target="_blank" class="text-white text-decoration-none border-bottom border-primary">Fahri Dwi</a> & Saprudi.</p>
-                </div>
-                <div class="col-md-5 text-center text-md-end mt-3 mt-md-0">
-                    <ul class="list-inline mb-0">
-                        <li class="list-inline-item small"><a href="#" class="footer-link opacity-75 text-decoration-none">Privacy Policy</a></li>
-                        <li class="list-inline-item small ms-3"><a href="#" class="footer-link opacity-75 text-decoration-none">Terms of Service</a></li>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <div class="bg-slate-50 rounded-2xl p-6 md:p-8" data-aos="fade-right">
+                    <h3 class="text-xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-headset text-sigap mr-3 text-2xl"></i>
+                        Kenapa Harus Konsultasi Dulu?
+                    </h3>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-start">
+                            <div class="w-8 h-8 bg-sigap/10 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                                <i class="fas fa-check text-sigap text-sm"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold mb-1">Analisis Kebutuhan</h4>
+                                <p class="text-slate-600 text-sm">Memastikan sistem sesuai dengan workflow pesantren</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="w-8 h-8 bg-sigap/10 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                                <i class="fas fa-check text-sigap text-sm"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold mb-1">Setup Awal</h4>
+                                <p class="text-slate-600 text-sm">Bantuan konfigurasi dan instalasi sistem</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="w-8 h-8 bg-sigap/10 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                                <i class="fas fa-check text-sigap text-sm"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold mb-1">Training Admin</h4>
+                                <p class="text-slate-600 text-sm">Panduan penggunaan sistem untuk admin pesantren</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="w-8 h-8 bg-sigap/10 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                                <i class="fas fa-check text-sigap text-sm"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold mb-1">Customisasi</h4>
+                                <p class="text-slate-600 text-sm">Rekomendasi modifikasi sesuai kebutuhan spesifik</p>
+                            </div>
+                        </li>
                     </ul>
                 </div>
+                
+                <div class="bg-gradient-to-br from-sigap/10 to-secondary/10 rounded-2xl p-6 md:p-8" data-aos="fade-left">
+                    <h3 class="text-xl font-bold mb-6">Kontak Pengembang</h3>
+                    <div class="space-y-4 mb-8">
+                        <a href="https://instagram.com/kmfffaa" 
+                           target="_blank"
+                           class="flex items-center p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-all">
+                            <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center mr-4">
+                                <i class="fab fa-instagram text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Instagram</h4>
+                                <p class="text-slate-600 text-sm">@kmfffaa - Respon cepat</p>
+                            </div>
+                            <div class="ml-auto">
+                                <i class="fas fa-arrow-right text-sigap"></i>
+                            </div>
+                        </a>
+                        
+                        <a href="mailto:mrfahridwi@gmail.com" 
+                           class="flex items-center p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-all">
+                            <div class="w-12 h-12 bg-gradient-to-r from-sigap to-secondary rounded-xl flex items-center justify-center mr-4">
+                                <i class="fas fa-envelope text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Email</h4>
+                                <p class="text-slate-600 text-sm">mrfahridwi@gmail.com</p>
+                            </div>
+                            <div class="ml-auto">
+                                <i class="fas fa-arrow-right text-sigap"></i>
+                            </div>
+                        </a>
+                        
+                        <a href="https://wa.me/6281234567890?text=Halo%20SIGAP,%20saya%20ingin%20konsultasi%20tentang%20sistem%20pendaftaran%20pesantren" 
+                           target="_blank"
+                           class="flex items-center p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-all">
+                            <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-xl flex items-center justify-center mr-4">
+                                <i class="fab fa-whatsapp text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">WhatsApp</h4>
+                                <p class="text-slate-600 text-sm">+62 812-3456-7890</p>
+                            </div>
+                            <div class="ml-auto">
+                                <i class="fas fa-arrow-right text-sigap"></i>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <div class="bg-white/80 rounded-xl p-4">
+                        <p class="text-sm text-slate-600">
+                            <strong>📝 Catatan:</strong> Silakan hubungi salah satu kontak di atas untuk konsultasi awal. Setelah konsultasi, Anda akan mendapatkan akses ke repository dan panduan instalasi.
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
+    </section>
+
+    <!-- Technology Stack Section -->
+    <section class="py-16 md:py-24 bg-slate-50">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="text-center mb-12 md:mb-20" data-aos="fade-up">
+                <h2 class="text-2xl md:text-3xl lg:text-4xl font-extrabold mb-4">Teknologi <span class="gradient-text">Modern</span> yang Digunakan</h2>
+                <p class="text-slate-500 max-w-2xl mx-auto text-sm md:text-base">
+                    Dibangun dengan stack teknologi terbaru untuk performa optimal
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm text-center hover-scale" data-aos="fade-up">
+                    <div class="w-16 h-16 bg-red-50 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <i class="fab fa-laravel text-red-600 text-3xl"></i>
+                    </div>
+                    <h4 class="font-bold mb-2">Laravel 12</h4>
+                    <p class="text-slate-600 text-xs">PHP Framework Terbaru</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-2xl shadow-sm text-center hover-scale" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-16 h-16 bg-blue-50 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <i class="fab fa-js-square text-blue-600 text-3xl"></i>
+                    </div>
+                    <h4 class="font-bold mb-2">JavaScript ES6+</h4>
+                    <p class="text-slate-600 text-xs">Modern JavaScript</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-2xl shadow-sm text-center hover-scale" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-16 h-16 bg-green-50 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <i class="fab fa-tailwind text-green-600 text-3xl"></i>
+                    </div>
+                    <h4 class="font-bold mb-2">Boostrap 5</h4>
+                    <p class="text-slate-600 text-xs">Komponen siap pakai</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-2xl shadow-sm text-center hover-scale" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-16 h-16 bg-purple-50 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-database text-purple-600 text-3xl"></i>
+                    </div>
+                    <h4 class="font-bold mb-2">MySQL</h4>
+                    <p class="text-slate-600 text-xs">Database Relasional</p>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center" data-aos="fade-up">
+                <p class="text-slate-600 text-sm md:text-base max-w-2xl mx-auto">
+                    <strong>💡 Untuk Developer:</strong> Sistem ini menggunakan arsitektur MVC yang clean, document-ready code, dan mudah untuk dikembangkan lebih lanjut.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-16 md:py-24 bg-white">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="text-center mb-12 md:mb-20" data-aos="fade-up">
+                <h2 class="text-2xl md:text-3xl lg:text-4xl font-extrabold mb-4">Pertanyaan <span class="text-sigap">Umum</span></h2>
+                <p class="text-slate-500 max-w-2xl mx-auto text-sm md:text-base">
+                    Jawaban untuk pertanyaan yang sering diajukan
+                </p>
+            </div>
+            
+            <div class="max-w-3xl mx-auto space-y-4">
+                <div class="border border-slate-200 rounded-2xl p-6" data-aos="fade-up">
+                    <h4 class="font-bold mb-3 flex items-center">
+                        <i class="fas fa-question-circle text-sigap mr-3"></i>
+                        Mengapa harus konsultasi dulu dengan pengembang?
+                    </h4>
+                    <p class="text-slate-600 text-sm">
+                        Konsultasi awal penting untuk memastikan sistem sesuai dengan kebutuhan spesifik pesantren Anda. Kami akan membantu analisis workflow, memberikan panduan instalasi, dan training penggunaan sistem.
+                    </p>
+                </div>
+                
+                <div class="border border-slate-200 rounded-2xl p-6" data-aos="fade-up" data-aos-delay="100">
+                    <h4 class="font-bold mb-3 flex items-center">
+                        <i class="fas fa-question-circle text-sigap mr-3"></i>
+                        Apakah benar-benar gratis?
+                    </h4>
+                    <p class="text-slate-600 text-sm">
+                        <strong>Ya, benar-benar gratis!</strong> SIGAP adalah proyek open source dengan MIT License. Tidak ada biaya lisensi atau subscription. Kode sumber sepenuhnya terbuka dan bisa dimodifikasi sesuai kebutuhan.
+                    </p>
+                </div>
+                
+                <div class="border border-slate-200 rounded-2xl p-6" data-aos="fade-up" data-aos-delay="200">
+                    <h4 class="font-bold mb-3 flex items-center">
+                        <i class="fas fa-question-circle text-sigap mr-3"></i>
+                        Saya bukan programmer, bisakah menggunakan sistem ini?
+                    </h4>
+                    <p class="text-slate-600 text-sm">
+                        <strong>Tentu bisa!</strong> Setelah konsultasi, kami akan membantu proses instalasi dan setup awal. Sistem ini user-friendly dengan interface yang mudah dipahami. Admin pesantren tidak perlu skill programming.
+                    </p>
+                </div>
+                
+                <div class="border border-slate-200 rounded-2xl p-6" data-aos="fade-up" data-aos-delay="300">
+                    <h4 class="font-bold mb-3 flex items-center">
+                        <i class="fas fa-question-circle text-sigap mr-3"></i>
+                        Bisakah sistem ini dikustomisasi?
+                    </h4>
+                    <p class="text-slate-600 text-sm">
+                        <strong>Sangat bisa!</strong> Karena open source, Anda bisa mengkustomisasi sesuai kebutuhan. Kami juga bisa membantu dengan custom development jika diperlukan (opsional, bisa dikomunikasikan saat konsultasi).
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Parallax Demo Section -->
+    <section id="demo" class="parallax-section py-20 md:py-32 text-white relative">
+        <div class="parallax-bg"></div>
+        <div class="container mx-auto px-4 md:px-6 relative z-10">
+            <div class="text-center mb-12 md:mb-20" data-aos="fade-up">
+                <h2 class="text-2xl md:text-3xl lg:text-4xl font-extrabold mb-4">Demo Aplikasi</h2>
+                <p class="text-slate-300 max-w-2xl mx-auto text-sm md:text-base">Coba pengalaman menggunakan SIGAP secara langsung</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
+                <div class="text-center md:text-left" data-aos="fade-right">
+                    <h3 class="text-xl md:text-2xl font-bold mb-4 md:mb-6">Akses Demo Sekarang</h3>
+                    <p class="text-slate-300 mb-6 md:mb-8 text-sm md:text-base">
+                        Jelajahi fitur-fitur utama SIGAP melalui versi demo kami. Sistem ini dioptimalkan untuk mobile dengan pengalaman pengguna yang mulus.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-sigap/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-mobile-alt text-sigap text-sm"></i>
+                            </div>
+                            <span class="text-sm md:text-base text-black ">Optimized for Mobile (80% pengguna)</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-sigap/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-bolt text-sigap text-sm"></i>
+                            </div>
+                            <span class="text-sm md:text-base text-black " >Loading cepat dengan AJAX</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-sigap/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-hand-pointer text-sigap text-sm"></i>
+                            </div>
+                            <span class="text-sm md:text-base text-black ">Touch-friendly interface</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col items-center" data-aos="fade-left">
+                    <div class="relative w-full max-w-xs md:max-w-sm">
+                        <div class="absolute -inset-4 bg-gradient-to-r from-sigap/20 to-blue-500/20 rounded-3xl blur-xl"></div>
+                        <div class="relative bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 md:p-8">
+                            <div class="text-center mb-6">
+                                <div class="w-16 h-16 md:w-20 md:h-20 bg-sigap/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i class="fas fa-play text-sigap text-2xl md:text-3xl"></i>
+                                </div>
+                                <h4 class="text-lg md:text-xl font-bold mb-2">Demo Interaktif</h4>
+                                <p class="text-slate-300 text-xs md:text-sm mb-6">Coba fitur utama tanpa login</p>
+                            </div>
+                            <button onclick="openDemoModal()" 
+                                    class="w-full py-3 md:py-4 bg-sigap hover:bg-green-700 text-white rounded-xl font-bold transition-all touch-friendly">
+                                <i class="fas fa-external-link-alt mr-2"></i> Buka Demo
+                            </button>
+                            <p class="text-xs text-slate-400 text-center mt-4">
+                                *Demo menggunakan data dummy untuk keamanan
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section class="py-16 md:py-24 bg-slate-900 text-white relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-sigap/10 rounded-full blur-[100px]"></div>
+        <div class="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[100px]"></div>
+
+        <div class="container mx-auto px-4 md:px-6 relative z-10">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-12 md:mb-16 italic" data-aos="fade-up">"Dari Analisis Menjadi Solusi Digital"</h2>
+            
+            <div class="max-w-4xl mx-auto space-y-8 md:space-y-12">
+                <div class="flex flex-col md:flex-row gap-6 items-start relative pl-8 timeline-item" data-aos="fade-right">
+                    <div class="px-4 md:px-6 py-1 md:py-2 bg-sigap rounded-full text-xs md:text-sm font-bold shrink-0">MINGGU 1</div>
+                    <div>
+                        <h4 class="text-lg md:text-xl font-bold mb-2">Analisis & Alur Sistem</h4>
+                        <p class="text-slate-400 text-xs md:text-sm leading-relaxed text-justify">Pemetaan masalah di lapangan, pengumpulan data kebutuhan admin pesantren, dan penyusunan flowchart pendaftaran santri baru.</p>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row gap-6 items-start relative pl-8 timeline-item" data-aos="fade-right" data-aos-delay="100">
+                    <div class="px-4 md:px-6 py-1 md:py-2 bg-sigap rounded-full text-xs md:text-sm font-bold shrink-0">MINGGU 2</div>
+                    <div>
+                        <h4 class="text-lg md:text-xl font-bold mb-2">ERD & UI/UX Design</h4>
+                        <p class="text-slate-400 text-xs md:text-sm leading-relaxed text-justify">Perancangan arsitektur database (Entity Relationship Diagram) dan pembuatan mockup antarmuka yang bersih serta user-friendly.</p>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row gap-6 items-start relative pl-8 timeline-item" data-aos="fade-right" data-aos-delay="200">
+                    <div class="px-4 md:px-6 py-1 md:py-2 bg-sigap rounded-full text-xs md:text-sm font-bold shrink-0">MINGGU 3</div>
+                    <div>
+                        <h4 class="text-lg md:text-xl font-bold mb-2">Setup & Autentikasi</h4>
+                        <p class="text-slate-400 text-xs md:text-sm leading-relaxed text-justify">Instalasi framework Laravel 12, konfigurasi database, dan pembuatan sistem login Multi-User (Admin & Pendaftar).</p>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row gap-6 items-start relative pl-8 timeline-item" data-aos="fade-right" data-aos-delay="300">
+                    <div class="px-4 md:px-6 py-1 md:py-2 bg-sigap rounded-full text-xs md:text-sm font-bold shrink-0">MINGGU 4</div>
+                    <div>
+                        <h4 class="text-lg md:text-xl font-bold mb-2">Core Development</h4>
+                        <p class="text-slate-400 text-xs md:text-sm leading-relaxed text-justify">Coding fitur utama: Form pendaftaran, Dashboard Statistik, Sistem Pembayaran Midtrans, dan modul Manajemen Santri.</p>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row gap-6 items-start relative pl-8 timeline-item" data-aos="fade-right" data-aos-delay="400">
+                    <div class="px-4 md:px-6 py-1 md:py-2 bg-sigap rounded-full text-xs md:text-sm font-bold shrink-0">MINGGU 5</div>
+                    <div>
+                        <h4 class="text-lg md:text-xl font-bold mb-2">Testing & Debugging</h4>
+                        <p class="text-slate-400 text-xs md:text-sm leading-relaxed text-justify">Uji coba fungsionalitas di berbagai browser (Cross-browser testing) dan perbaikan bug untuk memastikan performa maksimal.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="h-16 md:h-24 lg:hidden"></div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 md:py-24 bg-gradient-to-r from-sigap to-secondary text-white">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="text-center max-w-3xl mx-auto" data-aos="fade-up">
+                <h2 class="text-2xl md:text-3xl lg:text-4xl font-extrabold mb-6">Siap Transformasi Digital Pesantren Anda?</h2>
+                <p class="text-white/90 mb-8 text-sm md:text-base">
+                    <strong>Ingat:</strong> Sebelum mengakses kode sumber, Anda <strong>harus</strong> melakukan konsultasi terlebih dahulu dengan pengembang.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="#kontak" class="px-8 py-4 bg-white text-sigap hover:bg-slate-100 rounded-2xl font-bold transition-all shadow-lg touch-friendly">
+                        <i class="fas fa-comments mr-2"></i> Mulai Konsultasi
+                    </a>
+                    <a href="https://instagram.com/kmfffaa" 
+                       target="_blank"
+                       class="px-8 py-4 bg-dark/20 hover:bg-dark/30 text-white border border-white/30 rounded-2xl font-bold transition-all backdrop-blur-md touch-friendly">
+                        <i class="fab fa-instagram mr-2"></i> Chat Instagram
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Modal -->
+    <div id="demoModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeDemoModal()">&times;</button>
+            <div class="w-20 h-20 bg-sigap/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-comments text-sigap text-3xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold mb-4 text-dark">Konsultasi Terlebih Dahulu</h3>
+            <p class="text-slate-600 mb-6">
+                Untuk mengakses demo atau repository SIGAP, Anda perlu melakukan konsultasi terlebih dahulu dengan pengembang. 
+                Ini untuk memastikan sistem sesuai dengan kebutuhan pesantren Anda.
+            </p>
+            <div class="bg-slate-50 rounded-xl p-4 mb-6">
+                <p class="text-sm text-slate-600 mb-3">Silakan hubungi pengembang melalui:</p>
+                <a href="https://instagram.com/kmfffaa" 
+                   target="_blank"
+                   class="inline-flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-bold touch-friendly mb-3">
+                    <i class="fab fa-instagram"></i>
+                    Instagram: @kmfffaa
+                </a>
+                <a href="mailto:mrfahridwi@gmail.com" 
+                   class="inline-flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-sigap to-secondary text-white rounded-lg font-bold touch-friendly">
+                    <i class="fas fa-envelope"></i>
+                    Email: mrfahridwi@gmail.com
+                </a>
+            </div>
+            <button onclick="closeDemoModal()" 
+                    class="mt-6 w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-bold transition-all touch-friendly">
+                Tutup
+            </button>
+        </div>
     </div>
-</footer>
 
-    <button id="btn-back-to-top"><i class="fas fa-chevron-up"></i></button>
+    <footer class="bg-white border-t border-slate-100 py-12 md:py-16">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12 mb-8 md:mb-12">
+                <div>
+                    <h3 class="text-2xl md:text-3xl font-extrabold text-dark tracking-tighter mb-4">SIGAP<span class="text-sigap">.</span></h3>
+                    <p class="text-xs md:text-sm text-slate-500">
+                        Sistem Informasi Gerbang Pesantren - Proyek Open Source untuk Pendidikan Islam.
+                    </p>
+                    <div class="mt-4">
+                        <span class="opensource-badge text-xs">
+                            <i class="fab fa-github mr-1"></i>OPEN SOURCE
+                        </span>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4 text-dark">Navigasi</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#kelebihan" class="text-sm text-slate-600 hover:text-sigap transition-colors">Fitur Unggulan</a></li>
+                        <li><a href="#github" class="text-sm text-slate-600 hover:text-sigap transition-colors">GitHub Repository</a></li>
+                        <li><a href="#kontak" class="text-sm text-slate-600 hover:text-sigap transition-colors">Kontak Pengembang</a></li>
+                        <li><a href="#demo" class="text-sm text-slate-600 hover:text-sigap transition-colors">Demo Aplikasi</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4 text-dark">Kontak Wajib</h4>
+                    <ul class="space-y-2">
+                        <li class="text-sm text-slate-600">
+                            <i class="fab fa-instagram mr-2 text-sigap"></i>
+                            @kmfffaa
+                        </li>
+                        <li class="text-sm text-slate-600">
+                            <i class="fas fa-envelope mr-2 text-sigap"></i>
+                            mrfahridwi@gmail.com
+                        </li>
+                    </ul>
+                    <p class="text-xs text-slate-500 mt-3">
+                        *Harus konsultasi dulu sebelum akses
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4 text-dark">License</h4>
+                    <p class="text-sm text-slate-600 mb-3">MIT License</p>
+                    <p class="text-xs text-slate-500">
+                        Open source, gratis untuk semua pesantren. Bebas digunakan, dimodifikasi, dan didistribusikan.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="text-center pt-8 border-t border-slate-50 text-[10px] md:text-xs text-slate-400 font-bold uppercase tracking-[0.2em]">
+                &copy; 2025 SIGAP  - FAHRI DWI . Proyek Open Source untuk Pendidikan Islam.
+            </div>
+        </div>
+    </footer>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
-    <script src="js/main.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({ 
+            duration: 1000, 
+            once: true,
+            offset: 50,
+            delay: 100
+        });
+        
+        // Modal functions
+        function openDemoModal() {
+            document.getElementById('demoModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeDemoModal() {
+            document.getElementById('demoModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Close modal on outside click
+        document.getElementById('demoModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDemoModal();
+            }
+        });
+        
+        // Close modal with ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeDemoModal();
+            }
+        });
+        
+        // Mobile detection and optimization
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+        
+        if (isMobile()) {
+            // Add mobile-specific optimizations
+            document.documentElement.style.fontSize = '16px';
+            
+            // Smooth scroll for mobile
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // Add touch feedback
+            document.querySelectorAll('.touch-friendly').forEach(button => {
+                button.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.95)';
+                });
+                button.addEventListener('touchend', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        }
+        
+        // Parallax effect
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.parallax-bg');
+            if (parallax) {
+                parallax.style.transform = 'translateY(' + (scrolled * 0.5) + 'px)';
+            }
+        });
+        
+        // GitHub link handler
+        document.querySelectorAll('a[href*="github"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                openDemoModal();
+            });
+        });
+    </script>
 </body>
-
 </html>
